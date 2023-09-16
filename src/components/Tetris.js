@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 // VERSION 2.0 MULTIPLAYER ??
 import { createStage, checkCollision } from '../gameHelpers';
 
 // Styled Components
 import { StyledTetrisWrapper, StyledTetris } from './styles/StyledTetris';
+
+// Sounds and Music
+import Sound from 'react-sound';
+import sound from "./sounds/HIGHWAY_DRIVE.mp3"
 
 // Custom Hooks
 import { useInterval} from '../hooks/useInterval';
@@ -34,6 +38,8 @@ const Tetris = () => {
     }
   };
 
+const [isPlaying, setisPlaying] = useState(false)
+
   const startGame = () => {
     console.log("test")
     // Reset everything
@@ -44,7 +50,16 @@ const Tetris = () => {
     setScore(0);
     setRows(0);
     setLevel(0);
+    if (!isPlaying) { 
+      playMusic();
+      setisPlaying(true);
+    };
   };
+
+  const playMusic = () => {
+    new Audio(sound).play();
+    Audio.loop = true;
+  }
 
   const drop = () => {
     // Increase level when players have cleared 10 rows
