@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyledStage } from './styles/StyledStage';
-import sound from "./sounds/HIGHWAY_DRIVE.mp3"
 
 import Cell from './Cell';
 

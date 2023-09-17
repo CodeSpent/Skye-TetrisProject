@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 // VERSION 2.0 MULTIPLAYER ??
 import { createStage, checkCollision } from '../gameHelpers';
 
@@ -7,7 +7,12 @@ import { StyledTetrisWrapper, StyledTetris } from './styles/StyledTetris';
 
 // Sounds and Music
 import Sound from 'react-sound';
-import sound from "./sounds/HIGHWAY_DRIVE.mp3"
+import sound from "./sounds/BGMUSIC.mp3";
+import moveleftsound from "./soundfx/MOVELEFT.mp3";
+import moverightsound from "./soundfx/MOVERIGHT.mp3";
+import rotate from "./soundfx/ROTATE.mp3";
+import dropsound from "./soundfx/DROPSOUND.mp3";
+import gameoversound from "./soundfx/GAMEOVER.mp3";
 
 // Custom Hooks
 import { useInterval} from '../hooks/useInterval';
@@ -38,7 +43,7 @@ const Tetris = () => {
     }
   };
 
-const [isPlaying, setisPlaying] = useState(false)
+const [isPlaying, setIsPlaying] = useState(false)
 
   const startGame = () => {
     console.log("test")
@@ -52,14 +57,36 @@ const [isPlaying, setisPlaying] = useState(false)
     setLevel(0);
     if (!isPlaying) { 
       playMusic();
-      setisPlaying(true);
+      setIsPlaying(true);
+      setIsPlaying(false);
     };
   };
 
   const playMusic = () => {
-    new Audio(sound).play();
+    new Audio(sound).play()
     Audio.loop = true;
-  }
+  };
+
+  const moveLeftSound = () => {
+    new Audio(moveleftsound).play();
+  };
+
+  const moveRightSound = () => {
+    new Audio(moverightsound).play();
+  };
+
+  const rotateSound = () => {
+    new Audio(rotate).play();
+  };
+
+  const dropSound = () => {
+    new Audio(dropsound).play();
+  };
+
+  const gameOverSound = () => {
+    new Audio(gameoversound).play();
+  };
+
 
   const drop = () => {
     // Increase level when players have cleared 10 rows
@@ -77,6 +104,8 @@ const [isPlaying, setisPlaying] = useState(false)
         console.log("GAME OVER!!!");
         setGameOver(true);
         setDropTime(null);
+        gameOverSound();
+        setIsPlaying(false);
       }
       updatePlayerPos({ x: 0, y: 0, collided: true });
     }
@@ -101,12 +130,16 @@ const [isPlaying, setisPlaying] = useState(false)
     if (!gameOver) {
       if (keyCode === 37) {
         movePlayer(-1);
+        moveLeftSound();
       } else if (keyCode === 39) {
-        movePlayer(1);
+        movePlayer(1)
+        moveRightSound();
       } else if (keyCode === 40) {
         dropPlayer();
+        dropSound();
       } else if (keyCode === 38) {
-        playerRotate(stage, 1);
+        playerRotate(stage, 1)
+        rotateSound();
       }
     }
   };

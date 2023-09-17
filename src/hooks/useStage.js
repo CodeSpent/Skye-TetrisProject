@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createStage } from '../gameHelpers';
 import sound from "../components/sounds/HIGHWAY_DRIVE.mp3"
 
@@ -8,7 +8,7 @@ export const useStage = (player, resetPlayer) => {
 
   useEffect(() => {
     setRowsCleared(0);
-
+  
     const sweepRows = newStage =>
     newStage.reduce((ack, row) => {
       if (row.findIndex(cell => cell[0] === 0) === -1) {
